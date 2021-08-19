@@ -8,7 +8,7 @@ import (
 
 func TestSetup(t *testing.T) {
 	t.Run("default", func(t *testing.T) {
-		testingDB, err := Setup(mc.ContainerRequest{})
+		testingDB, err := NewTestDB(mc.ContainerRequest{})
 		assert.Nil(t, err)
 		assert.NotNil(t, testingDB)
 

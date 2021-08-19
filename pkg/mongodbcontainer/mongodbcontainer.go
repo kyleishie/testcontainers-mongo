@@ -85,12 +85,12 @@ func NewContainer(ctx context.Context, req ContainerRequest) (mc *Container, err
 	return
 }
 
-func (mc *Container) Start() error {
-	return mc.container.Start(mc.ctx)
+func (c *Container) Start() error {
+	return c.container.Start(c.ctx)
 }
 
-func (mc *Container) Stop() error {
-	return mc.container.Terminate(mc.ctx)
+func (c *Container) Stop() error {
+	return c.container.Terminate(c.ctx)
 }
 
 // NewClient creates a new mongo client using the connection string of the Container.
