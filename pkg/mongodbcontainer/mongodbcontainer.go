@@ -94,6 +94,27 @@ func (c *Container) Stop() error {
 	return c.Con.Terminate(c.ctx)
 }
 
+func (c *Container) ConnectionURI() (str string, err error) {
+	host, err := c.Con.Host(c.ctx)
+	if err != nil {
+		return
+	}
+
+	port, err := c.Con.MappedPort(c.ctx, defaultMappedPort)
+	if err != nil {
+		return
+	}
+
+	str = fmt.Sprintf(
+		"mongodb://%s:%s@%s:%d",
+		c.req.User,
+		c.req.Password,
+		host,
+		port.Int(),
+	)
+	return
+}
+
 // NewClient creates a new mongo client using the connection string of the Container.
 // The connection is tested once before returning the new client.
 func (c *Container) NewClient() (*mongo.Client, error) {
