@@ -2,9 +2,10 @@ package mongodbcontainer
 
 import (
 	"context"
+	"testing"
+
 	"github.com/stretchr/testify/assert"
 	"github.com/testcontainers/testcontainers-go/wait"
-	"testing"
 )
 
 func TestNewMongoDBContainer(t *testing.T) {
@@ -14,7 +15,7 @@ func TestNewMongoDBContainer(t *testing.T) {
 			c, err := NewContainer(context.Background(), req)
 			assert.Nil(t, err)
 			assert.NotNil(t, c)
-			assert.NotNil(t, c.container)
+			assert.NotNil(t, c.Con)
 			assert.Equal(t, defaultImage, c.req.Image)
 			assert.Len(t, c.req.ExposedPorts, 1)
 			assert.Equal(t, defaultMappedPort, c.req.ExposedPorts[0])

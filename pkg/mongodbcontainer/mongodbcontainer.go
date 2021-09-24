@@ -3,6 +3,7 @@ package mongodbcontainer
 import (
 	"context"
 	"fmt"
+
 	tc "github.com/testcontainers/testcontainers-go"
 	"github.com/testcontainers/testcontainers-go/wait"
 	"go.mongodb.org/mongo-driver/mongo"
@@ -29,13 +30,13 @@ type ContainerRequest struct {
 }
 
 type Container struct {
-	container tc.Container
-	req       ContainerRequest
-	ctx       context.Context
+	Con tc.Container
+	req ContainerRequest
+	ctx context.Context
 }
 
 // NewContainer creates an instance testcontainers.Container configured to run mongo:tag.
-// By default, i.e, passing an empty req, the container is configured with the mongo:latest image, port 27017,
+// By default, i.e, passing an empty req, the Con is configured with the mongo:latest image, port 27017,
 // a default user "user" with password "password". To override any of these options see ContainerRequest.
 func NewContainer(ctx context.Context, req ContainerRequest) (mc *Container, err error) {
 	provider, err := req.ProviderType.GetProvider()
@@ -71,9 +72,9 @@ func NewContainer(ctx context.Context, req ContainerRequest) (mc *Container, err
 	}
 
 	mc = &Container{
-		container: c,
-		req:       req,
-		ctx:       ctx,
+		Con: c,
+		req: req,
+		ctx: ctx,
 	}
 
 	if req.Started {
@@ -86,23 +87,23 @@ func NewContainer(ctx context.Context, req ContainerRequest) (mc *Container, err
 }
 
 func (c *Container) Start() error {
-	return c.container.Start(c.ctx)
+	return c.Con.Start(c.ctx)
 }
 
 func (c *Container) Stop() error {
-	return c.container.Terminate(c.ctx)
+	return c.Con.Terminate(c.ctx)
 }
 
 // NewClient creates a new mongo client using the connection string of the Container.
 // The connection is tested once before returning the new client.
 func (c *Container) NewClient() (*mongo.Client, error) {
 
-	host, err := c.container.Host(c.ctx)
+	host, err := c.Con.Host(c.ctx)
 	if err != nil {
 		return nil, err
 	}
 
-	port, err := c.container.MappedPort(c.ctx, defaultMappedPort)
+	port, err := c.Con.MappedPort(c.ctx, defaultMappedPort)
 	if err != nil {
 		return nil, err
 	}
